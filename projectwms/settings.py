@@ -20,6 +20,7 @@ ALLOWED_HOSTS = []
 # Application definition
 
 INSTALLED_APPS = [
+    'jazzmin',
     'django.contrib.admin',
     'django.contrib.auth',
     'django.contrib.contenttypes',
@@ -45,7 +46,9 @@ ROOT_URLCONF = 'projectwms.urls'
 TEMPLATES = [
     {
         'BACKEND': 'django.template.backends.django.DjangoTemplates',
-        'DIRS': [],
+        'DIRS': [
+            BASE_DIR / 'templates',
+        ],
         'APP_DIRS': True,
         'OPTIONS': {
             'context_processors': [
@@ -111,3 +114,76 @@ STATIC_URL = 'static/'
 # https://docs.djangoproject.com/en/5.2/ref/settings/#default-auto-field
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
+
+REST_FRAMEWORK = {
+    'DEFAULT_AUTHENTICATION_CLASSES': [
+        'rest_framework_simplejwt.authentication.JWTAuthentication',
+    ],
+    'DEFAULT_PERMISSION_CLASSES': [
+        'rest_framework.permissions.IsAuthenticated',
+    ],
+}
+
+INSTALLED_APPS = [
+    "jazzmin",  # precisa vir antes do admin
+    "django.contrib.admin",
+    "django.contrib.auth",
+    "django.contrib.contenttypes",
+    "django.contrib.sessions",
+    "django.contrib.messages",
+    "django.contrib.staticfiles",
+    # seus apps
+    "wmssistem",  # exemplo do app onde estão Supplier, Product, Batch
+]
+
+# Configurações do Jazzmin
+JAZZMIN_SETTINGS = {
+    "site_title": "Gestão de Validade",
+    "site_header": "Administração do Sistema",
+    "site_brand": "WMS system",
+    "welcome_sign": "Bem-vindo ao Painel de Controle",
+    "copyright": "WMS system © 2025",
+
+    # Logo opcional (adicione em static/img/logo.png)
+    # "site_logo": "img/logo.png",
+
+    # Ícones para apps e models (FontAwesome)
+    "icons": {
+        "auth": "fas fa-users-cog",
+        "auth.User": "fas fa-user",
+        "auth.Group": "fas fa-users",
+        "wmssistem.Supplier": "fas fa-truck",
+        "wmssistem.Product": "fas fa-box",
+        "wmssistem.Batch": "fas fa-warehouse",
+    },
+
+    # Organização do menu lateral
+    "order_with_respect_to": ["wmssistem"],
+
+    # Estrutura de menu customizada
+    "custom_links": {
+        "wmssistem": [
+            {
+                "name": "Dashboard",
+                "url": "/dashboard/",
+                "icon": "fas fa-chart-pie",
+                "permissions": ["auth.view_user"],
+            },
+            
+        ]
+    },
+
+    # Layout
+    "show_ui_builder": True,  # permite testar temas e cores direto no admin
+}
+
+# Configurações adicionais opcionais
+JAZZMIN_UI_TWEAKS = {
+    "theme": "default",  # temas bootstrap: cosmo, flatly, darkly, etc.
+    "dark_mode_theme": "slate",
+    "navbar": "navbar-dark navbar-primary",
+    "sidebar": "sidebar-dark-primary",
+    "footer_fixed": True,
+    "background": "bg-dark",
+
+}

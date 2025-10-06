@@ -1,0 +1,61 @@
+{% extends "admin/base_site.html" %}
+{% load static %}
+
+{% block content %}
+<div class="container-fluid">
+  <h1 class="mb-4">📊 Dashboard de Estoque</h1>
+
+  <div class="row">
+    <div class="col-md-3">
+      <div class="card bg-primary text-white">
+        <div class="card-body">
+          <h4>{{ total_products }}</h4>
+          <p>Produtos</p>
+        </div>
+      </div>
+    </div>
+    <div class="col-md-3">
+      <div class="card bg-info text-white">
+        <div class="card-body">
+          <h4>{{ total_batches }}</h4>
+          <p>Lotes</p>
+        </div>
+      </div>
+    </div>
+    <div class="col-md-3">
+      <div class="card bg-warning text-dark">
+        <div class="card-body">
+          <h4>{{ near_expiry }}</h4>
+          <p>Perto do Vencimento</p>
+        </div>
+      </div>
+    </div>
+    <div class="col-md-3">
+      <div class="card bg-danger text-white">
+        <div class="card-body">
+          <h4>{{ expired }}</h4>
+          <p>Vencidos</p>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <canvas id="stockChart" class="mt-5"></canvas>
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+<script>
+  const ctx = document.getElementById('stockChart');
+  new Chart(ctx, {
+    type: 'bar',
+    data: {
+      labels: ['Produtos', 'Lotes', 'Perto do Vencimento', 'Vencidos'],
+      datasets: [{
+        label: 'Resumo de Estoque',
+        data: [{{ total_products }}, {{ total_batches }}, {{ near_expiry }}, {{ expired }}],
+        backgroundColor: ['#007bff','#17a2b8','#ffc107','#dc3545']
+      }]
+    }
+  });
+</script>
+{% endblock %}
