@@ -1,0 +1,38 @@
+{% extends "admin/base_site.html" %}
+
+{% block content %}
+<div class="container-fluid">
+  <h1 class="mb-4">📦 Relatório de Lotes</h1>
+  <table class="table table-striped">
+    <thead>
+      <tr>
+        <th>ID do Lote</th>
+        <th>Produto</th>
+        <th>Quantidade</th>
+        <th>Data de Vencimento</th>
+        <th>Status</th>
+      </tr>
+    </thead>
+    <tbody>
+      {% for batch in batches %}
+      <tr>
+        <td>{{ batch.id }}</td>
+        <td>{{ batch.product.name }}</td>
+        <td>{{ batch.quantity }}</td>
+        <td>{{ batch.exp_date }}</td>
+        <td>
+          {% if batch.is_expired %}
+            <span class="badge bg-danger">Vencido</span>
+          {% elif batch.is_near_expiry %}
+            <span class="badge bg-warning text-dark">Perto do Vencimento</span>
+          {% else %}
+            <span class="badge bg-success">Válido</span>
+          {% endif %}
+        </td>
+      </tr>
+      {% endfor %}
+    </tbody>
+  </table>
+</div>
+<a href="{% url 'import_pdf' %}" class="btn btn-primary">Exportar PDF</a>
+{% endblock %}

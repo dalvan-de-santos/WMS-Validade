@@ -4,7 +4,7 @@
 {% block content %}
 <div class="container-fluid">
   <h1 class="mb-4">📊 Dashboard de Estoque</h1>
-
+  <a href="import-csv/" class="button">Importar CSV</a>
   <div class="row">
     <div class="col-md-3">
       <div class="card bg-primary text-white">
@@ -14,13 +14,14 @@
         </div>
       </div>
     </div>
-    <div class="col-md-3">
+    <a href="{% url 'batches_relatorio' %}"><div class="col-md-3">
       <div class="card bg-info text-white">
         <div class="card-body">
           <h4>{{ total_batches }}</h4>
           <p>Lotes</p>
         </div>
       </div>
+    </a>
     </div>
     <div class="col-md-3">
       <div class="card bg-warning text-dark">

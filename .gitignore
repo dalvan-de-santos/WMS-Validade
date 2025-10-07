@@ -42,16 +42,22 @@ celerybeat.pid
 .env.*
 
 # =========================
-# Flutter / Dart
+# kotlin
 # =========================
-# Flutter/Dart build
-.dart_tool/
-.packages
-.pub-cache/
-.pub/
-build/
-flutter_*.png
-
+# Kotlin/Native
+/.konan/    
+/.kotlin-native/
+# Kotlin/JS
+/out/
+# Kotlin Multiplatform
+/.kotlin/
+# Kotlin/IntelliJ
+/.idea/
+# Kotlin/Gradle
+/.gradle/
+/build/
+# Kotlin/Maven
+/.maven/
 
 # Android
 android/.gradle/
