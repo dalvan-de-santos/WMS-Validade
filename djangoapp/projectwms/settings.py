@@ -1,20 +1,24 @@
 
 from pathlib import Path
+import os
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
+DATA_DIR = BASE_DIR.parent / 'data' / 'web'
 
 
 # Quick-start development settings - unsuitable for production
 # See https://docs.djangoproject.com/en/5.2/howto/deployment/checklist/
 
 # SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY = 'django-insecure-x9ksbwgadwk4-5q+2z51h81h_t549y$g-izm*)4mrx-adlq!b8'
+SECRET_KEY = os.getenv("SECRET_KEY", "CHANGE-ME")
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = True
+DEBUG = bool(int(os.getenv("DEBUG", "0")))
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = [
+    h.strip() for h in os.getenv("ALLOWED_HOSTS", "").split(",")
+]
 
 
 # Application definition
@@ -69,8 +73,12 @@ WSGI_APPLICATION = 'projectwms.wsgi.application'
 
 DATABASES = {
     'default': {
-        'ENGINE': 'django.db.backends.sqlite3',
-        'NAME': BASE_DIR / 'db.sqlite3',
+        'ENGINE': os.getenv("DB_ENGINE", "CHANGE-ME"),
+        'NAME': os.getenv("POSTGRES_DB",'CHANGE-ME'),
+        'USER': os.getenv("POSTGRES_USER", "CHANGE-ME"),
+        'PASSWORD': os.getenv("POSTGRES_PASSWORD", "CHANGE-ME"),
+        'HOST': os.getenv("POSTGRES_HOST", "CHANGE-ME"),
+        'PORT': os.getenv("POSTGRES_PORT", "CHANGE-ME"),
     }
 }
 
@@ -109,7 +117,9 @@ USE_TZ = True
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/5.2/howto/static-files/
 
-STATIC_URL = 'static/'
+STATIC_URL = '/static/'
+STATIC_ROOT = DATA_DIR / 'static'
+
 
 # Default primary key field type
 # https://docs.djangoproject.com/en/5.2/ref/settings/#default-auto-field
@@ -133,8 +143,8 @@ INSTALLED_APPS = [
     "django.contrib.sessions",
     "django.contrib.messages",
     "django.contrib.staticfiles",
-    # seus apps
-    "wmssistem",  # exemplo do app onde estão Supplier, Product, Batch
+    "rest_framework",
+    "wmssistem", 
 ]
 
 # Configurações do Jazzmin

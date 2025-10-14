@@ -12,6 +12,7 @@ dist/
 build/
 .eggs/
 *.log
+/data/
 
 # Virtualenv
 .venv/
@@ -26,6 +27,7 @@ media/
 staticfiles/
 static/
 local_settings.py
+
 
 # Celery
 celerybeat-schedule

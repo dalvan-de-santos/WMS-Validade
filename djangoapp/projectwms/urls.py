@@ -5,8 +5,12 @@ from rest_framework.routers import DefaultRouter
 from wmssistem.views import SupplierViewSet, ProductViewSet, BatchViewSet
 from rest_framework_simplejwt.views import TokenObtainPairView, TokenRefreshView
 from wmssistem.views import dashboard_view
+from django.conf import settings
+from django.conf.urls.static import static
 
 
+
+# API ROUTER
 router = DefaultRouter()
 router.register(r'suppliers', SupplierViewSet)
 router.register(r'products', ProductViewSet)
@@ -20,3 +24,5 @@ urlpatterns = [
     path('api/token/', TokenObtainPairView.as_view(), name='token_obtain_pair'),
     path('api/token/refresh/', TokenRefreshView.as_view(), name='token_refresh'),
 ]
+
+

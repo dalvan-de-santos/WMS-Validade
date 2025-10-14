@@ -1,0 +1,42 @@
+# Arquivos de ambiente
+.env
+*.local
+
+# Diretórios de cache do Python
+__pycache__/
+*.py[cod]
+*.pyo
+*.pyd
+*.pkl
+
+# Diretórios de migrações (se quiser gerar dentro do container)
+*/migrations/*.py
+!*/migrations/__init__.py
+
+# Logs
+*.log
+logs/
+*.out
+
+# Banco de dados SQLite local
+*.sqlite3
+
+# Diretórios de dependências
+venv/
+env/
+.venv/
+
+# Diretórios de build e cache
+build/
+dist/
+*.egg-info/
+.eggs/
+
+# Arquivos de IDEs
+.vscode/
+.idea/
+*.iml
+
+# Arquivos de sistema
+.DS_Store
+Thumbs.db

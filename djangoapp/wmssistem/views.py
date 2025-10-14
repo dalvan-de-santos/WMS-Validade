@@ -6,12 +6,15 @@ from rest_framework.response import Response
 from django.utils import timezone
 from .models import Supplier, Product, Batch
 from .serializers import SupplierSerializer, ProductSerializer, BatchSerializer
-import io
 from django.http import FileResponse
-from reportlab.pdfgen import canvas
 from .models import Batch
 from django.contrib.auth.decorators import login_required
 from rest_framework.permissions import IsAuthenticated
+from reportlab.lib import colors
+from reportlab.lib.pagesizes import A4
+from reportlab.platypus import SimpleDocTemplate, Table, TableStyle
+from io import BytesIO
+
 
 
 
@@ -31,45 +34,71 @@ def dashboard_view(request):
     return render(request, "admin/dashboard.html", context)
 
 
+def near_expiry_view(request):
+    today = timezone.localdate()
+    products = Batch.objects.filter(
+        exp_date__gte=today,
+        exp_date__lte=today + timezone.timedelta(days=10)
+    ).order_by('exp_date')
+    return render(request, "admin/near_expiry.html", {"products": products, "op": 'n'})
+
+
 
 #Relatorios e importação PDF
 
 @login_required
 def batches_relatorio(request):
     batches = Batch.objects.all().order_by('-exp_date')
-    return render(request, 'admin/batches_report.html', {'batches': batches})
+    return render(request, 'admin/batches_report.html', {'batches': batches, 'op': 'b'})
 
 @login_required
-def import_pdf(request):
-    buffer = io.BytesIO()
-    p = canvas.Canvas(buffer)
+def import_pdf(request, op):
+    if op == 'b':
+        batches = Batch.objects.all().order_by('-exp_date')
+    elif op == 'n':
+        today = timezone.localdate()
+        batches = Batch.objects.filter(
+            exp_date__gte=today,
+            exp_date__lte=today + timezone.timedelta(days=10)
+        ).order_by('exp_date')
 
-    # título
-    p.setFont("Helvetica-Bold", 14)
-    p.drawString(100, 800, "Relatório de Lotes")
+    buffer = BytesIO()
+    doc = SimpleDocTemplate(buffer, pagesize=A4)
 
-    batches = Batch.objects.all().order_by('-exp_date')
+    # Cabeçalho da tabela
+    data = [["Código", "Produto", "Validade", "Quantidade"]]
 
-    y = 770
+    # Linhas com os dados vindos do banco
     for batch in batches:
-        linha = f"Código: {batch.lot_code} | Produto: {batch.product.name} | Validade: {batch.exp_date} | Qtd: {batch.quantity}"
-        p.setFont("Helvetica", 10)
-        p.drawString(80, y, linha)
-        y -= 20
-        if y < 40:
-            p.showPage()
-            y = 800
+        data.append([
+            batch.lot_code,
+            batch.product.name,
+            batch.exp_date.strftime("%d/%m/%Y"),
+            batch.quantity
+        ])
 
-    p.showPage()
-    p.save()
+    # Criar tabela
+    table = Table(data, colWidths=[80, 200, 100, 80])
+
+    # Estilo da tabela
+    style = TableStyle([
+        ("BACKGROUND", (0,0), (-1,0), colors.grey),   # fundo do cabeçalho
+        ("TEXTCOLOR", (0,0), (-1,0), colors.whitesmoke),
+        ("ALIGN", (0,0), (-1,-1), "CENTER"),
+        ("FONTNAME", (0,0), (-1,0), "Helvetica-Bold"),
+        ("FONTSIZE", (0,0), (-1,0), 12),
+        ("BOTTOMPADDING", (0,0), (-1,0), 8),
+        ("GRID", (0,0), (-1,-1), 0.5, colors.black), # bordas
+    ])
+    table.setStyle(style)
+
+    # Montar documento
+    elements = [table]
+    doc.build(elements)
 
     buffer.seek(0)
+
     return FileResponse(buffer, as_attachment=True, filename="lotes.pdf")
-
-
-
-
-
 
 
 #Classes da API

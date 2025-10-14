@@ -1,0 +1,30 @@
+{% extends "admin/base_site.html" %}
+
+{% block content %}
+<div class="container-fluid">
+  <h1 class="mb-4">📦 Relatório de produtos perto do vencimento</h1>
+  <table class="table table-striped">
+    <thead>
+      <tr>
+        <th>ID do Produto</th>
+        <th>Produto</th>
+        <th>Quantidade</th>
+        <th>Data de Vencimento</th>
+        
+      </tr>
+    </thead>
+    <tbody>
+      {% for product in products %}
+      <tr>
+        <td>{{ product.id }}</td>
+        <td>{{ product.name }}</td>
+        <td>{{ product.quantity }}</td>
+        <td>{{ product.exp_date }}</td>
+    
+      </tr>
+      {% endfor %}
+    </tbody>
+  </table>
+</div>
+<a href="{% url 'import_pdf' op %}" class="btn btn-primary">Exportar PDF</a>
+{% endblock %}

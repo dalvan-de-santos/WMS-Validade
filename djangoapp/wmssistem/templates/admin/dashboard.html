@@ -4,7 +4,7 @@
 {% block content %}
 <div class="container-fluid">
   <h1 class="mb-4">📊 Dashboard de Estoque</h1>
-  <a href="import-csv/" class="button">Importar CSV</a>
+  
   <div class="row">
     <div class="col-md-3">
       <div class="card bg-primary text-white">
@@ -23,6 +23,7 @@
       </div>
     </a>
     </div>
+    <a href="{% url 'near_expiry' %}">
     <div class="col-md-3">
       <div class="card bg-warning text-dark">
         <div class="card-body">
@@ -30,6 +31,7 @@
           <p>Perto do Vencimento</p>
         </div>
       </div>
+      </a>
     </div>
     <div class="col-md-3">
       <div class="card bg-danger text-white">
