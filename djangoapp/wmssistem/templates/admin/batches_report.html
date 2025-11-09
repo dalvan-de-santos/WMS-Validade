@@ -16,12 +16,12 @@
     <tbody>
       {% for batch in batches %}
       <tr>
-        <td>{{ batch.id }}</td>
+        <td>{{ batch.lot_code }}</td>
         <td>{{ batch.product.name }}</td>
         <td>{{ batch.quantity }}</td>
         <td>{{ batch.exp_date }}</td>
         <td>
-          {% if batch.is_expired %}
+          {% if batch.is_expiry %}
             <span class="badge bg-danger">Vencido</span>
           {% elif batch.is_near_expiry %}
             <span class="badge bg-warning text-dark">Perto do Vencimento</span>

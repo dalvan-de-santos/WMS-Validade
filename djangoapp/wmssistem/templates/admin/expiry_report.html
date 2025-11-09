@@ -2,7 +2,7 @@
 
 {% block content %}
 <div class="container-fluid">
-  <h1 class="mb-4">📦 Relatório de produtos perto do vencimento</h1>
+  <h1 class="mb-4">📦 Relatório de produtos Vencidos</h1>
   <table class="table table-striped">
     <thead>
       <tr>
@@ -20,11 +20,10 @@
         <td>{{ product.product.name }}</td>
         <td>{{ product.quantity }}</td>
         <td>{{ product.exp_date }}</td>
-
+    
       </tr>
       {% endfor %}
     </tbody>
   </table>
-</div>
-<a href="{% url 'import_pdf' op %}" class="btn btn-primary">Exportar PDF</a>
+  <a href="{% url 'import_pdf' op %}" class="btn btn-primary">Exportar PDF</a>
 {% endblock %}

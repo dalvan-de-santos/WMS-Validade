@@ -23,6 +23,7 @@
       </div>
     </a>
     </div>
+
     <a href="{% url 'near_expiry' %}">
     <div class="col-md-3">
       <div class="card bg-warning text-dark">
@@ -33,6 +34,8 @@
       </div>
       </a>
     </div>
+
+    <a href="{% url 'expiry_report' %}">
     <div class="col-md-3">
       <div class="card bg-danger text-white">
         <div class="card-body">
@@ -40,8 +43,12 @@
           <p>Vencidos</p>
         </div>
       </div>
+      </a>
     </div>
+    
   </div>
+  
+
 
   <canvas id="stockChart" class="mt-5"></canvas>
 </div>

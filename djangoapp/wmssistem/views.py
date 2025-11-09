@@ -33,7 +33,7 @@ def dashboard_view(request):
     }
     return render(request, "admin/dashboard.html", context)
 
-
+@login_required
 def near_expiry_view(request):
     today = timezone.localdate()
     products = Batch.objects.filter(
@@ -41,6 +41,18 @@ def near_expiry_view(request):
         exp_date__lte=today + timezone.timedelta(days=10)
     ).order_by('exp_date')
     return render(request, "admin/near_expiry.html", {"products": products, "op": 'n'})
+
+@login_required
+def expiry_report_view(request):
+    today = timezone.localdate()
+
+    expired_batches = Batch.objects.filter(
+        exp_date__lt=today
+    ).order_by('exp_date')
+    
+
+
+    return render(request, "admin/expiry_report.html", {"products": expired_batches, "op": 'e'})
 
 
 
@@ -60,6 +72,12 @@ def import_pdf(request, op):
         batches = Batch.objects.filter(
             exp_date__gte=today,
             exp_date__lte=today + timezone.timedelta(days=10)
+        ).order_by('exp_date')
+    
+    elif op == 'e':
+        today = timezone.localdate()
+        batches = Batch.objects.filter(
+            exp_date__lt=today
         ).order_by('exp_date')
 
     buffer = BytesIO()
